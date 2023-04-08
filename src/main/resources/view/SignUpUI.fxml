@@ -1,14 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="lk.ijse.dep10.erpSystem.controlls.SignUpUIController"
-            prefHeight="400.0" prefWidth="600.0">
 
+<AnchorPane prefHeight="400.0" prefWidth="531.0" stylesheets="@../styles/table_styles.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.dep10.erpSystem.controlls.SignUpUIController">
+   <children>
+      <VBox alignment="CENTER" layoutX="10.0" layoutY="123.0" spacing="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
+         <children>
+            <Label alignment="CENTER" prefHeight="29.0" prefWidth="531.0" text="ADMIN SIGNUP" textAlignment="CENTER" textFill="#2594d0">
+               <font>
+                  <Font size="23.0" />
+               </font>
+            </Label>
+            <HBox maxWidth="1.7976931348623157E308" spacing="10.0">
+               <children>
+                  <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="20.0" prefWidth="152.0" text="ADMIN NAME:" textAlignment="RIGHT" />
+                  <TextField fx:id="txtName" prefHeight="24.0" prefWidth="228.0" promptText="ENTER ADMIN NAME" HBox.hgrow="ALWAYS" />
+               </children>
+            </HBox>
+            <HBox maxWidth="1.7976931348623157E308" spacing="10.0">
+               <children>
+                  <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="20.0" prefWidth="152.0" text="EMPLOYEE ID:" textAlignment="RIGHT" />
+                  <TextField fx:id="txtId" prefHeight="24.0" prefWidth="228.0" promptText="ENTER EMPLOYEE ID " HBox.hgrow="ALWAYS" />
+               </children>
+            </HBox>
+            <HBox layoutX="10.0" layoutY="83.0" maxWidth="1.7976931348623157E308" spacing="10.0">
+               <children>
+                  <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="20.0" prefWidth="152.0" text="PASSWORD" textAlignment="RIGHT" />
+                  <PasswordField fx:id="txtPassword" maxWidth="1.7976931348623157E308" promptText="ENTER PASSWORD" HBox.hgrow="ALWAYS" />
+               </children>
+            </HBox>
+            <HBox layoutX="10.0" layoutY="117.0" maxWidth="1.7976931348623157E308" spacing="10.0">
+               <children>
+                  <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="20.0" prefWidth="152.0" text="RE-ENTER PASSWORD:" textAlignment="RIGHT" />
+                  <PasswordField fx:id="txtRePassword" maxWidth="1.7976931348623157E308" promptText="RE-ENTER PASSWORD" HBox.hgrow="ALWAYS" />
+               </children>
+            </HBox>
+            <Button fx:id="btnCreate" defaultButton="true" mnemonicParsing="false" onAction="#btnCreateOnAction" prefHeight="40.0" prefWidth="141.0" style="-fx-background-color: lightblue; lightblue: ;" text="CREATE ACCOUNT" />
+         </children>
+      </VBox>
+      <Label alignment="CENTER" layoutX="192.0" layoutY="-11.0" maxWidth="1.7976931348623157E308" prefHeight="179.0" prefWidth="340.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
+         <graphic>
+            <ImageView fitHeight="179.0" fitWidth="299.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/erpLogo.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Label>
+      <ComboBox fx:id="cmbRole" layoutX="327.0" layoutY="351.0" onAction="#cmbRoleOnAction" prefWidth="150.0" />
+   </children>
 </AnchorPane>

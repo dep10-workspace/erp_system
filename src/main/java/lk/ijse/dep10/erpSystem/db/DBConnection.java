@@ -9,7 +9,7 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 public class DBConnection {
-    private static DBConnection dbConnection;
+    private static DBConnection dbConnection = new DBConnection();
     private final Connection connection;
 
     private DBConnection() {
@@ -47,7 +47,7 @@ public class DBConnection {
     }
 
     public static DBConnection getInstance() {
-        return dbConnection==null?dbConnection= new DBConnection():dbConnection;
+        return dbConnection;
     }
 
     public Connection getConnection() {
