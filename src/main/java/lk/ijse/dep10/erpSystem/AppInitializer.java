@@ -21,9 +21,9 @@ public class AppInitializer extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-        primaryStage.setScene(new Scene(new FXMLLoader(getClass().getResource("/view/SignUpUI.fxml")).load()));
+        primaryStage.setScene(new Scene(new FXMLLoader(getClass().getResource("/view/StoresManagerUI.fxml")).load()));
         primaryStage.centerOnScreen();
-        primaryStage.setResizable(false);
+        primaryStage.setMaximized(true);
         primaryStage.show();
 
     }

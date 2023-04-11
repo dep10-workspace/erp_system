@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="660.0" prefWidth="1366.0" style="-fx-background-color: lightgrey;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.dep10.erpSystem.controlls.StoresManagerUIController">
+   <children>
+      <VBox layoutX="14.0" layoutY="8.0" prefHeight="430.0" prefWidth="182.0" style="-fx-background-color: white;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <ImageView fitHeight="187.0" fitWidth="161.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/erpLogo.png" />
+               </image>
+            </ImageView>
+            <VBox spacing="10.0">
+               <children>
+                  <Button fx:id="btnSuppliers" mnemonicParsing="false" onAction="#btnSuppliersOnAction" prefHeight="36.0" prefWidth="160.0" style="-fx-background-color: lightblue;" text="SUPPLIERS" />
+                  <Button fx:id="btnQuotations" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#btnQuotationOnAction" prefHeight="36.0" prefWidth="160.0" style="-fx-background-color: lightblue;" text="QUATATIONS" />
+                  <Button fx:id="btnPurchase" layoutX="10.0" layoutY="286.0" mnemonicParsing="false" onAction="#btnPurchaseOnAction" prefHeight="36.0" prefWidth="160.0" style="-fx-background-color: lightblue;" text="PURCHASE" />
+                  <Button fx:id="btnStock" layoutX="10.0" layoutY="332.0" mnemonicParsing="false" onAction="#btnStockOnAction" prefHeight="36.0" prefWidth="160.0" style="-fx-background-color: lightblue;" text="STOCK" />
+                  <Button fx:id="btnOrders" layoutX="10.0" layoutY="378.0" mnemonicParsing="false" onAction="#btnOrdersOnAction" prefHeight="36.0" prefWidth="160.0" style="-fx-background-color: lightblue;" text="ORDERS" />
+                  <Button fx:id="btnIssues" layoutX="10.0" layoutY="424.0" mnemonicParsing="false" onAction="#btnIssuesOnAction" prefHeight="36.0" prefWidth="160.0" style="-fx-background-color: lightblue;" text="ISSUES" />
+               </children>
+            </VBox>
+         </children>
+         <padding>
+            <Insets left="10.0" right="10.0" />
+         </padding>
+      </VBox>
+      <Label alignment="CENTER" layoutX="181.0" layoutY="7.0" prefHeight="36.0" prefWidth="1185.0" style="-fx-background-color: white;" text="MAIN STORE " textFill="#4797dd" AnchorPane.leftAnchor="181.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <font>
+            <Font size="26.0" />
+         </font>
+      </Label>
+      <StackPane fx:id="stkQuotation" layoutX="199.0" layoutY="62.0" prefHeight="547.0" prefWidth="1167.0">
+         <children>
+            <VBox fx:id="quotationPane" layoutX="10.0" layoutY="10.0" spacing="10.0">
+               <children>
+                  <Label prefHeight="43.0" prefWidth="1161.0" style="-fx-background-color: white; -fx-background-radius: 10;" text="QUOTATIONS">
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                  </Label>
+                  <HBox prefHeight="24.0" prefWidth="1153.0" spacing="10.0">
+                     <children>
+                        <Button mnemonicParsing="false" prefHeight="24.0" prefWidth="240.0" text="+New Quotation">
+                           <HBox.margin>
+                              <Insets right="130.0" />
+                           </HBox.margin>
+                        </Button>
+                        <Label alignment="CENTER" prefHeight="24.0" prefWidth="605.0">
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                        </Label>
+                        <TextField alignment="CENTER" prefHeight="24.0" prefWidth="370.0" promptText="SEARCH HERE" />
+                     </children>
+                     <padding>
+                        <Insets right="7.0" />
+                     </padding>
+                  </HBox>
+                  <TableView prefHeight="467.0" prefWidth="1131.0">
+                     <columns>
+                        <TableColumn prefWidth="145.0" text="Quotation Number" />
+                        <TableColumn prefWidth="118.0" text="Supplier ID" />
+                        <TableColumn prefWidth="298.0" text="Supply Name" />
+                        <TableColumn prefWidth="218.0" text="Item Type" />
+                        <TableColumn minWidth="0.0" text="Unit" />
+                        <TableColumn prefWidth="100.0" text="Price" />
+                        <TableColumn prefWidth="102.0" text="Status" />
+                        <TableColumn prefWidth="97.0" text="Action" />
+                     </columns>
+                     <VBox.margin>
+                        <Insets right="7.0" />
+                     </VBox.margin>
+                  </TableView>
+               </children>
+            </VBox>
+            <VBox fx:id="purchasePane" layoutX="10.0" layoutY="10.0" spacing="10.0">
+               <children>
+                  <Label prefHeight="43.0" prefWidth="1161.0" style="-fx-background-color: white; -fx-background-radius: 10;" text="PURCHASE">
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                  </Label>
+                  <HBox prefHeight="24.0" prefWidth="1153.0" spacing="10.0">
+                     <children>
+                        <Button mnemonicParsing="false" prefHeight="24.0" prefWidth="240.0" text="+New Purchase">
+                           <HBox.margin>
+                              <Insets right="130.0" />
+                           </HBox.margin>
+                        </Button>
+                        <Label alignment="CENTER" prefHeight="24.0" prefWidth="605.0">
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                        </Label>
+                        <TextField alignment="CENTER" prefHeight="24.0" prefWidth="370.0" promptText="SEARCH HERE" />
+                     </children>
+                     <padding>
+                        <Insets right="7.0" />
+                     </padding>
+                  </HBox>
+                  <TableView prefHeight="467.0" prefWidth="1131.0">
+                     <columns>
+                        <TableColumn prefWidth="154.0" text="Purchasing Number" />
+                        <TableColumn prefWidth="122.0" text="Purchased Date" />
+                        <TableColumn prefWidth="100.0" text="Item type" />
+                        <TableColumn prefWidth="84.0" text="Supply ID" />
+                        <TableColumn minWidth="0.0" prefWidth="324.0" text="Supplier Name" />
+                        <TableColumn prefWidth="49.0" text="Unit" />
+                        <TableColumn prefWidth="93.0" text="Unit Price" />
+                        <TableColumn minWidth="0.0" prefWidth="109.0" text="Quantity" />
+                        <TableColumn prefWidth="124.0" text="Total" />
+                     </columns>
+                     <VBox.margin>
+                        <Insets right="7.0" />
+                     </VBox.margin>
+                  </TableView>
+               </children>
+            </VBox>
+            <VBox fx:id="stockPane" layoutX="10.0" layoutY="10.0" spacing="10.0">
+               <children>
+                  <Label prefHeight="43.0" prefWidth="1161.0" style="-fx-background-color: white; -fx-background-radius: 10;" text="STOCK">
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                  </Label>
+                  <HBox prefHeight="24.0" prefWidth="1153.0" spacing="10.0">
+                     <children>
+                        <Button mnemonicParsing="false" prefHeight="24.0" prefWidth="240.0" text="+New Purchase">
+                           <HBox.margin>
+                              <Insets right="130.0" />
+                           </HBox.margin>
+                        </Button>
+                        <Label alignment="CENTER" prefHeight="24.0" prefWidth="605.0">
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                        </Label>
+                        <TextField alignment="CENTER" prefHeight="24.0" prefWidth="370.0" promptText="SEARCH HERE" />
+                     </children>
+                     <padding>
+                        <Insets right="7.0" />
+                     </padding>
+                  </HBox>
+                  <TableView prefHeight="467.0" prefWidth="1131.0">
+                     <columns>
+                        <TableColumn prefWidth="127.0" text="Item Number" />
+                        <TableColumn prefWidth="250.0" text="Item type" />
+                        <TableColumn prefWidth="146.0" text="Supply ID" />
+                        <TableColumn prefWidth="309.0" text="Supplier Name" />
+                        <TableColumn minWidth="0.0" prefWidth="102.0" text="Unit Price" />
+                        <TableColumn prefWidth="113.0" text="Balance" />
+                        <TableColumn prefWidth="112.0" text="Action" />
+                     </columns>
+                     <VBox.margin>
+                        <Insets right="7.0" />
+                     </VBox.margin>
+                  </TableView>
+               </children>
+            </VBox>
+            <VBox fx:id="ordersPane" layoutX="10.0" layoutY="10.0" spacing="10.0">
+               <children>
+                  <Label prefHeight="43.0" prefWidth="1161.0" style="-fx-background-color: white; -fx-background-radius: 10;" text="Orders">
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                  </Label>
+                  <HBox prefHeight="24.0" prefWidth="1153.0" spacing="10.0">
+                     <children>
+                        <Button mnemonicParsing="false" prefHeight="24.0" prefWidth="240.0" text="Check Stock">
+                           <HBox.margin>
+                              <Insets right="130.0" />
+                           </HBox.margin>
+                        </Button>
+                        <Label alignment="CENTER" prefHeight="24.0" prefWidth="605.0">
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                        </Label>
+                        <TextField alignment="CENTER" prefHeight="24.0" prefWidth="370.0" promptText="SEARCH HERE" />
+                     </children>
+                     <padding>
+                        <Insets right="7.0" />
+                     </padding>
+                  </HBox>
+                  <TableView prefHeight="467.0" prefWidth="1131.0">
+                     <columns>
+                        <TableColumn prefWidth="127.0" text="Order Number" />
+                        <TableColumn prefWidth="117.0" text="Item Number" />
+                        <TableColumn prefWidth="96.0" text="Item Type" />
+                        <TableColumn prefWidth="122.0" text="Supplier ID" />
+                        <TableColumn minWidth="0.0" prefWidth="110.0" text="Order By" />
+                        <TableColumn prefWidth="94.0" text="Site" />
+                        <TableColumn prefWidth="76.0" text="Unit" />
+                        <TableColumn prefWidth="128.0" text="Quantity" />
+                        <TableColumn prefWidth="75.0" text="Status" />
+                        <TableColumn prefWidth="214.0" text="Action" />
+                     </columns>
+                     <VBox.margin>
+                        <Insets right="7.0" />
+                     </VBox.margin>
+                  </TableView>
+               </children>
+            </VBox>
+            <VBox fx:id="issuesPane" layoutX="10.0" layoutY="10.0" spacing="10.0">
+               <children>
+                  <Label prefHeight="43.0" prefWidth="1161.0" style="-fx-background-color: white; -fx-background-radius: 10;" text="ISSUE">
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                  </Label>
+                  <HBox prefHeight="24.0" prefWidth="1153.0" spacing="10.0">
+                     <children>
+                        <Button mnemonicParsing="false" prefHeight="24.0" prefWidth="240.0" text="Check Orders">
+                           <HBox.margin>
+                              <Insets right="130.0" />
+                           </HBox.margin>
+                        </Button>
+                        <Label alignment="CENTER" prefHeight="24.0" prefWidth="605.0">
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                        </Label>
+                        <TextField alignment="CENTER" prefHeight="24.0" prefWidth="370.0" promptText="SEARCH HERE" />
+                     </children>
+                     <padding>
+                        <Insets right="7.0" />
+                     </padding>
+                  </HBox>
+                  <TableView prefHeight="467.0" prefWidth="1131.0">
+                     <columns>
+                        <TableColumn prefWidth="127.0" text="Issue Number" />
+                        <TableColumn prefWidth="117.0" text="Date" />
+                        <TableColumn prefWidth="96.0" text="Time" />
+                        <TableColumn prefWidth="122.0" text="Order Number" />
+                        <TableColumn minWidth="0.0" prefWidth="110.0" text="Order BY" />
+                        <TableColumn prefWidth="60.0" text="Site" />
+                        <TableColumn prefWidth="110.0" text="Item Number" />
+                        <TableColumn prefWidth="83.0" text="Item Type" />
+                        <TableColumn prefWidth="84.0" text="Unit" />
+                        <TableColumn prefWidth="141.0" text="Issued Quantity" />
+                        <TableColumn prefWidth="109.0" text="Issued To" />
+                     </columns>
+                     <VBox.margin>
+                        <Insets right="7.0" />
+                     </VBox.margin>
+                  </TableView>
+               </children>
+            </VBox>
+            <VBox fx:id="supplierPane" layoutX="10.0" layoutY="10.0" spacing="10.0">
+               <children>
+                  <Label prefHeight="43.0" prefWidth="1161.0" style="-fx-background-color: white; -fx-background-radius: 10;" text="SUPPLIERS">
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                  </Label>
+                  <HBox prefHeight="24.0" prefWidth="1153.0" spacing="10.0">
+                     <children>
+                        <Button mnemonicParsing="false" prefHeight="24.0" prefWidth="240.0" text="+New Supplier">
+                           <HBox.margin>
+                              <Insets right="130.0" />
+                           </HBox.margin>
+                        </Button>
+                        <Label alignment="CENTER" prefHeight="24.0" prefWidth="605.0" text="Date &amp; Time">
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                        </Label>
+                        <TextField alignment="CENTER" prefHeight="24.0" prefWidth="370.0" promptText="SEARCH HERE" />
+                     </children>
+                     <padding>
+                        <Insets right="7.0" />
+                     </padding>
+                  </HBox>
+                  <TableView prefHeight="467.0" prefWidth="1131.0">
+                     <columns>
+                        <TableColumn prefWidth="67.0" text="ID" />
+                        <TableColumn prefWidth="196.0" text="Name" />
+                        <TableColumn prefWidth="205.0" text="Address" />
+                        <TableColumn prefWidth="178.0" text="Contact Number" />
+                        <TableColumn minWidth="0.0" prefWidth="170.0" text="Bank" />
+                        <TableColumn prefWidth="222.0" text="Account Number" />
+                        <TableColumn prefWidth="121.0" text="New Quotation" />
+                     </columns>
+                     <VBox.margin>
+                        <Insets right="7.0" />
+                     </VBox.margin>
+                  </TableView>
+               </children>
+            </VBox>
+         </children>
+      </StackPane>
+      <Button layoutX="1238.0" layoutY="615.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="121.0" text="PRINT" />
+   </children>
+</AnchorPane>
