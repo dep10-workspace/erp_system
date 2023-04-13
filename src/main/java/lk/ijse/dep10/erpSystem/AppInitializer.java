@@ -12,16 +12,13 @@ import java.io.IOException;
 public class AppInitializer extends Application {
 
     public static void main(String[] args) {
-        new Thread(()->{
-            DBConnection.getInstance().getConnection();
-        }).start();
 
         launch(args);
     }
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-        primaryStage.setScene(new Scene(new FXMLLoader(getClass().getResource("/view/SignUpUI.fxml")).load()));
+        primaryStage.setScene(new Scene(new FXMLLoader(getClass().getResource("/view/PMUI.fxml")).load()));
         primaryStage.centerOnScreen();
         primaryStage.setResizable(false);
         primaryStage.show();
