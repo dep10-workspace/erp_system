@@ -8,7 +8,7 @@ import lk.ijse.dep10.erpSystem.Role;
 import lk.ijse.dep10.erpSystem.db.DBConnection;
 import lk.ijse.dep10.erpSystem.util.PasswordEncoder;
 
-import javax.crypto.spec.GCMParameterSpec;
+
 import java.sql.*;
 
 public class SignUpUIController {

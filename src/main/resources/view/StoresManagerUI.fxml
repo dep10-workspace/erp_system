@@ -45,48 +45,6 @@
       </Label>
       <StackPane fx:id="stkQuotation" layoutX="199.0" layoutY="62.0" prefHeight="547.0" prefWidth="1167.0">
          <children>
-            <VBox fx:id="quotationPane" layoutX="10.0" layoutY="10.0" spacing="10.0">
-               <children>
-                  <Label prefHeight="43.0" prefWidth="1161.0" style="-fx-background-color: white; -fx-background-radius: 10;" text="QUOTATIONS">
-                     <padding>
-                        <Insets left="10.0" />
-                     </padding>
-                  </Label>
-                  <HBox prefHeight="24.0" prefWidth="1153.0" spacing="10.0">
-                     <children>
-                        <Button mnemonicParsing="false" prefHeight="24.0" prefWidth="240.0" text="+New Quotation">
-                           <HBox.margin>
-                              <Insets right="130.0" />
-                           </HBox.margin>
-                        </Button>
-                        <Label alignment="CENTER" prefHeight="24.0" prefWidth="605.0">
-                           <HBox.margin>
-                              <Insets />
-                           </HBox.margin>
-                        </Label>
-                        <TextField alignment="CENTER" prefHeight="24.0" prefWidth="370.0" promptText="SEARCH HERE" />
-                     </children>
-                     <padding>
-                        <Insets right="7.0" />
-                     </padding>
-                  </HBox>
-                  <TableView prefHeight="467.0" prefWidth="1131.0">
-                     <columns>
-                        <TableColumn prefWidth="145.0" text="Quotation Number" />
-                        <TableColumn prefWidth="118.0" text="Supplier ID" />
-                        <TableColumn prefWidth="298.0" text="Supply Name" />
-                        <TableColumn prefWidth="218.0" text="Item Type" />
-                        <TableColumn minWidth="0.0" text="Unit" />
-                        <TableColumn prefWidth="100.0" text="Price" />
-                        <TableColumn prefWidth="102.0" text="Status" />
-                        <TableColumn prefWidth="97.0" text="Action" />
-                     </columns>
-                     <VBox.margin>
-                        <Insets right="7.0" />
-                     </VBox.margin>
-                  </TableView>
-               </children>
-            </VBox>
             <VBox fx:id="purchasePane" layoutX="10.0" layoutY="10.0" spacing="10.0">
                <children>
                   <Label prefHeight="43.0" prefWidth="1161.0" style="-fx-background-color: white; -fx-background-radius: 10;" text="PURCHASE">
@@ -112,7 +70,7 @@
                         <Insets right="7.0" />
                      </padding>
                   </HBox>
-                  <TableView prefHeight="467.0" prefWidth="1131.0">
+                  <TableView fx:id="tblPurchase" prefHeight="467.0" prefWidth="1131.0">
                      <columns>
                         <TableColumn prefWidth="154.0" text="Purchasing Number" />
                         <TableColumn prefWidth="122.0" text="Purchased Date" />
@@ -155,7 +113,7 @@
                         <Insets right="7.0" />
                      </padding>
                   </HBox>
-                  <TableView prefHeight="467.0" prefWidth="1131.0">
+                  <TableView fx:id="tblStock" prefHeight="467.0" prefWidth="1131.0">
                      <columns>
                         <TableColumn prefWidth="127.0" text="Item Number" />
                         <TableColumn prefWidth="250.0" text="Item type" />
@@ -196,7 +154,7 @@
                         <Insets right="7.0" />
                      </padding>
                   </HBox>
-                  <TableView prefHeight="467.0" prefWidth="1131.0">
+                  <TableView fx:id="tblOrders" prefHeight="467.0" prefWidth="1131.0">
                      <columns>
                         <TableColumn prefWidth="127.0" text="Order Number" />
                         <TableColumn prefWidth="117.0" text="Item Number" />
@@ -240,7 +198,7 @@
                         <Insets right="7.0" />
                      </padding>
                   </HBox>
-                  <TableView prefHeight="467.0" prefWidth="1131.0">
+                  <TableView fx:id="tblIssue" prefHeight="467.0" prefWidth="1131.0">
                      <columns>
                         <TableColumn prefWidth="127.0" text="Issue Number" />
                         <TableColumn prefWidth="117.0" text="Date" />
@@ -269,12 +227,53 @@
                   </Label>
                   <HBox prefHeight="24.0" prefWidth="1153.0" spacing="10.0">
                      <children>
-                        <Button mnemonicParsing="false" prefHeight="24.0" prefWidth="240.0" text="+New Supplier">
+                        <Button fx:id="btnNewSupplier" mnemonicParsing="false" onAction="#btnNewSupplierOnAction" prefHeight="24.0" prefWidth="240.0" text="+New Supplier">
                            <HBox.margin>
                               <Insets right="130.0" />
                            </HBox.margin>
                         </Button>
                         <Label alignment="CENTER" prefHeight="24.0" prefWidth="605.0" text="Date &amp; Time">
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                        </Label>
+                        <TextField fx:id="txtSupplier" alignment="CENTER" prefHeight="24.0" prefWidth="370.0" promptText="SEARCH HERE" />
+                     </children>
+                     <padding>
+                        <Insets right="7.0" />
+                     </padding>
+                  </HBox>
+                  <TableView fx:id="tblSuppliers" prefHeight="467.0" prefWidth="1131.0">
+                     <columns>
+                        <TableColumn prefWidth="67.0" text="ID" />
+                        <TableColumn prefWidth="196.0" text="Name" />
+                        <TableColumn prefWidth="205.0" text="Address" />
+                        <TableColumn prefWidth="178.0" text="Contact Number" />
+                        <TableColumn minWidth="0.0" prefWidth="170.0" text="Bank" />
+                        <TableColumn prefWidth="222.0" text="Account Number" />
+                        <TableColumn prefWidth="121.0" text="New Quotation" />
+                     </columns>
+                     <VBox.margin>
+                        <Insets right="7.0" />
+                     </VBox.margin>
+                  </TableView>
+               </children>
+            </VBox>
+            <VBox fx:id="quotationPane" spacing="10.0">
+               <children>
+                  <Label prefHeight="43.0" prefWidth="1161.0" style="-fx-background-color: white; -fx-background-radius: 10;" text="QUOTATIONS">
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                  </Label>
+                  <HBox prefHeight="24.0" prefWidth="1153.0" spacing="10.0">
+                     <children>
+                        <Button fx:id="btnNewQuotation" mnemonicParsing="false" onAction="#btnNewQuotationOnAction" prefHeight="24.0" prefWidth="240.0" text="+New Quotation">
+                           <HBox.margin>
+                              <Insets right="130.0" />
+                           </HBox.margin>
+                        </Button>
+                        <Label alignment="CENTER" prefHeight="24.0" prefWidth="605.0">
                            <HBox.margin>
                               <Insets />
                            </HBox.margin>
@@ -285,15 +284,16 @@
                         <Insets right="7.0" />
                      </padding>
                   </HBox>
-                  <TableView prefHeight="467.0" prefWidth="1131.0">
+                  <TableView fx:id="tblQuotation" prefHeight="467.0" prefWidth="1131.0">
                      <columns>
-                        <TableColumn prefWidth="67.0" text="ID" />
-                        <TableColumn prefWidth="196.0" text="Name" />
-                        <TableColumn prefWidth="205.0" text="Address" />
-                        <TableColumn prefWidth="178.0" text="Contact Number" />
-                        <TableColumn minWidth="0.0" prefWidth="170.0" text="Bank" />
-                        <TableColumn prefWidth="222.0" text="Account Number" />
-                        <TableColumn prefWidth="121.0" text="New Quotation" />
+                        <TableColumn prefWidth="145.0" text="Quotation Number" />
+                        <TableColumn prefWidth="118.0" text="Supplier ID" />
+                        <TableColumn prefWidth="298.0" text="Supply Name" />
+                        <TableColumn prefWidth="218.0" text="Item Type" />
+                        <TableColumn minWidth="0.0" text="Unit" />
+                        <TableColumn prefWidth="100.0" text="Price" />
+                        <TableColumn prefWidth="102.0" text="Status" />
+                        <TableColumn prefWidth="97.0" text="Action" />
                      </columns>
                      <VBox.margin>
                         <Insets right="7.0" />
