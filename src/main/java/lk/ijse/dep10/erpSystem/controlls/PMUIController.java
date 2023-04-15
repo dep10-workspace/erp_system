@@ -30,6 +30,8 @@ public class PMUIController {
     public TableView<Approved> tblApproved;
     public Button btnRejected;
     public Button btnSaveChanges;
+    public Button btnAcceptApprove;
+    public Button btnAcceptReject;
     @FXML
     private Button btnApproved;
 
@@ -59,15 +61,46 @@ public class PMUIController {
 
     @FXML
     void btnApprovedOnAction(ActionEvent event) {
+        btnAcceptApprove.setDisable(true);
+        btnAcceptReject.setDisable(false);
+        stkNotApproved.setDisable(true);
+        stkApproved.setDisable(false);
+        tblApproved.getItems().clear();
+        loadDataForTableApproved();
 
     }
 
     @FXML
     void btnPendingOnAction(ActionEvent event) {
+        btnAcceptApprove.setDisable(false);
+        btnAcceptReject.setDisable(false);
+        stkNotApproved.setDisable(false);
+        stkApproved.setDisable(true);
+        tblNotApproved.getItems().clear();
+        loadDataForTablePending();
+
+
+    }
+    public void btnRejectedOnAction(ActionEvent actionEvent) {
+        btnAcceptReject.setDisable(true);
+        btnAcceptApprove.setDisable(false);
+        stkApproved.setDisable(false);
+        stkNotApproved.setDisable(true);
+        tblApproved.getItems().clear();
+        loadDataForTableRejected();
 
     }
 
     public void initialize() {
+//        btnAcceptApprove.setDisable(true);
+//        btnAcceptReject.setDisable(true);
+//
+//        tblNotApproved.getSelectionModel().selectedItemProperty().addListener((value,previous,current)->{
+//            btnAcceptReject.setDisable(current==null);
+//            btnAcceptApprove.setDisable(current==null);
+//        });
+
+
         KeyFrame key = new KeyFrame(Duration.seconds(1), event -> {
             lblTime.setText("Time: " + LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss")));
             lblDate.setText("Date: " + LocalDate.now());
@@ -89,13 +122,63 @@ public class PMUIController {
         tblApproved.getColumns().get(4).setCellValueFactory(new PropertyValueFactory<>("unitPrice"));
         tblApproved.getColumns().get(5).setCellValueFactory(new PropertyValueFactory<>("balanceQuantity"));
 
+        tblNotApproved.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("quotation_number"));
+        tblNotApproved.getColumns().get(1).setCellValueFactory(new PropertyValueFactory<>("name"));
+        tblNotApproved.getColumns().get(2).setCellValueFactory(new PropertyValueFactory<>("type"));
+        tblNotApproved.getColumns().get(3).setCellValueFactory(new PropertyValueFactory<>("unit"));
+        tblNotApproved.getColumns().get(4).setCellValueFactory(new PropertyValueFactory<>("unitPrice"));
+        tblNotApproved.getColumns().get(5).setCellValueFactory(new PropertyValueFactory<>("Approval"));
+
         loadDataForTableSupplier();
-        loadDataForTableApproved();
-        loadDataForTableRejected();
+//        loadDataForTableApproved();
+//        loadDataForTableRejected();
+//        loadDataForTablePending();
 
         stkNotApproved.setDisable(true);
         stkApproved.setDisable(true);
 
+    }
+
+    private void loadDataForTablePending() {
+        try {
+
+
+            Connection connection = DBConnection.getInstance().getConnection();
+            Statement statement = connection.createStatement();
+            String sql = "Select * from Item where approval='PENDING'";
+            ResultSet resultSet = statement.executeQuery(sql);
+            PreparedStatement suplierStm = connection.prepareStatement("Select supplier_id from Quotation where quotation_number=?");
+            PreparedStatement suplierStm2 = connection.prepareStatement("select name from Supplier where id=?");
+
+            while (resultSet.next()) {
+                String quatationNumber = resultSet.getString("quotation_number");
+                String unit = resultSet.getString("unit");
+                BigDecimal unitPrice = resultSet.getBigDecimal("price");
+                String type = resultSet.getString("item_type");
+//                String itemNumber = resultSet.getString("item_number");
+
+                suplierStm.setString(1, quatationNumber);
+                ResultSet resultSet1 = suplierStm.executeQuery();
+                resultSet1.next();
+                String suplierid = resultSet1.getString(1);
+
+                suplierStm2.setString(1, suplierid);
+                ResultSet resultSet2 = suplierStm2.executeQuery();
+                resultSet2.next();
+                String supplierName = resultSet2.getString(1);
+
+
+
+                NotApproved notApprovedItem = new NotApproved(quatationNumber, supplierName, type, Unit.valueOf(unit), unitPrice);
+                tblNotApproved.getItems().add(notApprovedItem);
+
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR, "Fail to load approved items").showAndWait();
+            throw new RuntimeException(e);
+        }
     }
 
     private void loadDataForTableRejected() {
@@ -116,7 +199,7 @@ public class PMUIController {
                 String unit = resultSet.getString("unit");
                 BigDecimal unitPrice = resultSet.getBigDecimal("price");
                 String type = resultSet.getString("item_type");
-                String itemNumber = resultSet.getString("item_number");
+                String itemNumber = resultSet.getString("id");
 
                 suplierStm.setString(1, quatationNumber);
                 ResultSet resultSet1 = suplierStm.executeQuery();
@@ -148,7 +231,7 @@ public class PMUIController {
 
             Connection connection = DBConnection.getInstance().getConnection();
             Statement statement = connection.createStatement();
-            String sql = "Select * from Item where approval='APPROVED'";
+            String sql = "Select * from Item where approval='APPROVE'";
             ResultSet resultSet = statement.executeQuery(sql);
             PreparedStatement suplierStm = connection.prepareStatement("Select supplier_id from Quotation where quotation_number=?");
             PreparedStatement suplierStm2 = connection.prepareStatement("select name from Supplier where id=?");
@@ -160,7 +243,7 @@ public class PMUIController {
                 String unit = resultSet.getString("unit");
                 BigDecimal unitPrice = resultSet.getBigDecimal("price");
                 String type = resultSet.getString("item_type");
-                String itemNumber = resultSet.getString("item_number");
+                String itemNumber = resultSet.getString("id");
 
                 suplierStm.setString(1, quatationNumber);
                 ResultSet resultSet1 = suplierStm.executeQuery();
@@ -175,7 +258,7 @@ public class PMUIController {
                 stockStm.setString(1, itemNumber);
                 ResultSet resultSet3 = stockStm.executeQuery();
                 resultSet3.next();
-                String balanced_quantity = resultSet3.getString("name");
+                String balanced_quantity = resultSet3.getString("balanced_quantity");
 
                 Approved approvedItem = new Approved(quatationNumber, supplierName, type, Unit.valueOf(unit), unitPrice, balanced_quantity);
                 tblApproved.getItems().add(approvedItem);
@@ -219,10 +302,85 @@ public class PMUIController {
         }
     }
 
-    public void btnRejectedOnAction(ActionEvent actionEvent) {
+
+
+    public void btnAcceptApproveOnAction(ActionEvent actionEvent) {
+        try {
+            if(tblApproved.getSelectionModel().getSelectedItem()!=null){
+                Approved selectedItem=tblApproved.getSelectionModel().getSelectedItem();
+                Connection connection =DBConnection.getInstance().getConnection();
+                Statement stm = connection.createStatement();
+                ResultSet resultSet = stm.executeQuery(String.format("SELECT * from Item where quotation_number='%s'", selectedItem.getQuotationNumber()));
+                resultSet.next();
+                String approval = resultSet.getString("approval");
+                if(approval.equals("NOT APPROVED")){
+                    decisionApplication("APPROVE",selectedItem.getQuotationNumber());
+                    tblApproved.getItems().remove(selectedItem);
+
+                }
+
+            } else if (tblNotApproved.getSelectionModel().getSelectedItem()!=null) {
+                decisionApplication("APPROVE",tblNotApproved.getSelectionModel().getSelectedItem().getQuotation_number());
+                tblNotApproved.getItems().remove(tblNotApproved.getSelectionModel().getSelectedItem());
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR,"Fail to edit data base").showAndWait();
+            throw new RuntimeException(e);
+        }
+
 
     }
 
-    public void btnSaveChangesOnAction(ActionEvent actionEvent) {
+    public void btnAcceptRejectOnAction(ActionEvent actionEvent) {
+        try {
+            if(tblApproved.getSelectionModel().getSelectedItem()!=null){
+                Approved selectedItem=tblApproved.getSelectionModel().getSelectedItem();
+                Connection connection =DBConnection.getInstance().getConnection();
+                Statement stm = connection.createStatement();
+                ResultSet resultSet = stm.executeQuery(String.format("SELECT * from Item where quotation_number='%s'", selectedItem.getQuotationNumber()));
+                resultSet.next();
+                String approval = resultSet.getString("approval");
+                String item_number =resultSet.getString("id");
+
+                Statement statement = connection.createStatement();
+                ResultSet resultSet1 = statement.executeQuery("select * from Stock");
+                if(resultSet1.next()) {
+                    new Alert(Alert.AlertType.ERROR,"Already perched this item").showAndWait();
+                    return;
+                }
+                if(approval.equals("APPROVE")){
+                    decisionApplication("NOT APPROVED",selectedItem.getQuotationNumber());
+                    tblApproved.getItems().remove(selectedItem);
+
+                }
+
+            } else if (tblNotApproved.getSelectionModel().getSelectedItem()!=null) {
+                decisionApplication("NOT APPROVED",tblNotApproved.getSelectionModel().getSelectedItem().getQuotation_number());
+                tblNotApproved.getItems().remove(tblNotApproved.getSelectionModel().getSelectedItem());
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR,"Fail to edit database").showAndWait();
+            throw new RuntimeException(e);
+        }
+
+
+    }
+    public void decisionApplication(String condition,String quotationNumber){
+        try {
+            String sql =String.format("Update Item set approval='%s' where quotation_number =?",condition);
+            Connection connection =DBConnection.getInstance().getConnection();
+            PreparedStatement preStm = connection.prepareStatement(sql);
+            preStm.setString(1,quotationNumber);
+            preStm.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR,"Fail to update set");
+            throw new RuntimeException(e);
+        }
+
     }
 }
