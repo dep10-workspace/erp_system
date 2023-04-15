@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<SplitPane dividerPositions="0.41228070175438597" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.dep10.erpSystem.controlls.PMUIController">
+<SplitPane dividerPositions="0.41228070175438597" stylesheets="@../styles/table_styles.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.dep10.erpSystem.controlls.PMUIController">
    <items>
       <AnchorPane maxWidth="400.0" prefHeight="350.0" prefWidth="400.0">
          <children>
