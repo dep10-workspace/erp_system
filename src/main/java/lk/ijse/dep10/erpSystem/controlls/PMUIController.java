@@ -66,28 +66,35 @@ public class PMUIController {
     private TableView<Supplier> tblSupplier;
 
     public void initialize() {
-        toggleNew.selectedToggleProperty().addListener((value1, previous1, current1) -> {
-            if (current1 == null) {
-                txtSearchAll.setDisable(false);
-            }
-            if (current1.equals(rdoApproved)) {
+        txtSearchAll.setDisable(true);
+        btnAcceptReject.setDisable(true);
+        btnAcceptReject.setDisable(true);
+        toggleNew.selectedToggleProperty().addListener((value, previous, current) -> {
+            txtSearchAll.setDisable(current==null);
+            if (current.equals(rdoApproved)) {
                 txtSearchAll.clear();
+                btnAcceptApprove.setDisable(true);
+                btnAcceptReject.setDisable(false);
                 stkImage.setVisible(false);
                 stkApproved.setVisible(true);
                 stkNotApproved.setVisible(false);
                 tblApproved.getItems().clear();
                 loadDataForTable("APPROVE");
 
-            } else if (current1.equals(rdoPending)) {
+            } else if (current.equals(rdoPending)) {
                 txtSearchAll.clear();
+                btnAcceptApprove.setDisable(false);
+                btnAcceptReject.setDisable(false);
                 stkImage.setVisible(false);
                 stkApproved.setVisible(false);
                 stkNotApproved.setVisible(true);
                 tblNotApproved.getItems().clear();
                 loadDataForTablePending();
 
-            } else if (current1.equals(rdoRejected)) {
+            } else if (current.equals(rdoRejected)) {
                 txtSearchAll.clear();
+                btnAcceptReject.setDisable(true);
+                btnAcceptApprove.setDisable(false);
                 stkImage.setVisible(false);
                 stkApproved.setVisible(true);
                 stkNotApproved.setVisible(false);
