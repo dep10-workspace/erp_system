@@ -1,6 +1,7 @@
 package lk.ijse.dep10.erpSystem.util;
 
 import javafx.collections.ObservableList;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import jdk.jfr.DataAmount;
 
@@ -51,8 +52,8 @@ public class Supplier implements Serializable {
     public void setContact(ArrayList<String> contact) {
         this.contact = contact;
     }
-    public ComboBox getContactComb(){
-        ComboBox cmb=new ComboBox();
+    public ChoiceBox getContactComb(){
+        ChoiceBox cmb=new ChoiceBox();
         ObservableList<String>contactList= cmb.getItems();
         contactList.add("077-3017818");
         for (String s : contact) {

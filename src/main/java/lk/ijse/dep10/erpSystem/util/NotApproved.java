@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class NotApproved {
     private String quotation_number;
+    private String SupplierId;
     private String name;
     private String type;
     private Unit unit;

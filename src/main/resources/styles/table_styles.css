@@ -1,6 +1,8 @@
 .invalid{
 -fx-border-color: red;
 }
-#btnAcceptApprove,btnAcceptReject:hover{
-    -fx-background-color: red;
+#btnAcceptApprove:hover,#btnAcceptReject:hover{
+    -fx-background-color: lightblue;
+    -fx-border-width: 1px;
+    -fx-font-weight: bold;
 }

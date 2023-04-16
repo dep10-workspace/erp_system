@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class Approved {
     private String QuotationNumber;
+    private String supplierId;
     private String name;
     private String type;
     private Unit unit;

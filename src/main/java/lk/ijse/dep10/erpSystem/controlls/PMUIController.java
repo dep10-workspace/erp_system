@@ -5,11 +5,10 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 import lk.ijse.dep10.erpSystem.db.DBConnection;
@@ -29,9 +28,13 @@ public class PMUIController {
 
     public TableView<Approved> tblApproved;
     public Button btnRejected;
-    public Button btnSaveChanges;
+
     public Button btnAcceptApprove;
     public Button btnAcceptReject;
+    public StackPane stkImage;
+    public TextField txtSearchSupplier;
+    public Button btnSearch;
+    public TextField txtSearchAll;
     @FXML
     private Button btnApproved;
 
@@ -61,6 +64,7 @@ public class PMUIController {
 
     @FXML
     void btnApprovedOnAction(ActionEvent event) {
+        stkImage.setVisible(false);
         btnAcceptApprove.setDisable(true);
         btnAcceptReject.setDisable(false);
         stkNotApproved.setDisable(true);
@@ -74,6 +78,7 @@ public class PMUIController {
 
     @FXML
     void btnPendingOnAction(ActionEvent event) {
+        stkImage.setVisible(false);
         btnAcceptApprove.setDisable(false);
         btnAcceptReject.setDisable(false);
         stkNotApproved.setDisable(false);
@@ -87,6 +92,7 @@ public class PMUIController {
     }
 
     public void btnRejectedOnAction(ActionEvent actionEvent) {
+        stkImage.setVisible(false);
         btnAcceptReject.setDisable(true);
         btnAcceptApprove.setDisable(false);
         stkApproved.setDisable(false);
@@ -99,14 +105,20 @@ public class PMUIController {
     }
 
     public void initialize() {
-//        btnAcceptApprove.setDisable(true);
-//        btnAcceptReject.setDisable(true);
-//
-//        tblNotApproved.getSelectionModel().selectedItemProperty().addListener((value,previous,current)->{
-//            btnAcceptReject.setDisable(current==null);
-//            btnAcceptApprove.setDisable(current==null);
-//        });
+        txtSearchAll.textProperty().addListener((value,current,previous)->{
 
+        });
+
+
+
+        txtSearchSupplier.textProperty().addListener((value,previous,current)->{
+            if(current.isEmpty()) {
+                tblSupplier.getItems().clear();
+                loadDataForTableSupplier();
+
+            }
+
+                });
 
         KeyFrame key = new KeyFrame(Duration.seconds(1), event -> {
             lblTime.setText("Time: " + LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss")));
@@ -123,26 +135,29 @@ public class PMUIController {
         tblSupplier.getColumns().get(3).setCellValueFactory(new PropertyValueFactory<>("ContactComb"));
 
         tblApproved.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("QuotationNumber"));
-        tblApproved.getColumns().get(1).setCellValueFactory(new PropertyValueFactory<>("name"));
-        tblApproved.getColumns().get(2).setCellValueFactory(new PropertyValueFactory<>("type"));
-        tblApproved.getColumns().get(3).setCellValueFactory(new PropertyValueFactory<>("unit"));
-        tblApproved.getColumns().get(4).setCellValueFactory(new PropertyValueFactory<>("unitPrice"));
-        tblApproved.getColumns().get(5).setCellValueFactory(new PropertyValueFactory<>("balanceQuantity"));
+        tblApproved.getColumns().get(1).setCellValueFactory(new PropertyValueFactory<>("SupplierId"));
+        tblApproved.getColumns().get(2).setCellValueFactory(new PropertyValueFactory<>("name"));
+        tblApproved.getColumns().get(3).setCellValueFactory(new PropertyValueFactory<>("type"));
+        tblApproved.getColumns().get(4).setCellValueFactory(new PropertyValueFactory<>("unit"));
+        tblApproved.getColumns().get(5).setCellValueFactory(new PropertyValueFactory<>("unitPrice"));
+        tblApproved.getColumns().get(6).setCellValueFactory(new PropertyValueFactory<>("balanceQuantity"));
 
         tblNotApproved.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("quotation_number"));
-        tblNotApproved.getColumns().get(1).setCellValueFactory(new PropertyValueFactory<>("name"));
-        tblNotApproved.getColumns().get(2).setCellValueFactory(new PropertyValueFactory<>("type"));
-        tblNotApproved.getColumns().get(3).setCellValueFactory(new PropertyValueFactory<>("unit"));
-        tblNotApproved.getColumns().get(4).setCellValueFactory(new PropertyValueFactory<>("unitPrice"));
-        tblNotApproved.getColumns().get(5).setCellValueFactory(new PropertyValueFactory<>("Approval"));
+        tblNotApproved.getColumns().get(1).setCellValueFactory(new PropertyValueFactory<>("SupplierId"));
+        tblNotApproved.getColumns().get(2).setCellValueFactory(new PropertyValueFactory<>("name"));
+        tblNotApproved.getColumns().get(3).setCellValueFactory(new PropertyValueFactory<>("type"));
+        tblNotApproved.getColumns().get(4).setCellValueFactory(new PropertyValueFactory<>("unit"));
+        tblNotApproved.getColumns().get(5).setCellValueFactory(new PropertyValueFactory<>("unitPrice"));
+        tblNotApproved.getColumns().get(6).setCellValueFactory(new PropertyValueFactory<>("Approval"));
 
         loadDataForTableSupplier();
 //        loadDataForTableApproved();
 //        loadDataForTableRejected();
 //        loadDataForTablePending();
 
-        stkNotApproved.setDisable(true);
-        stkApproved.setDisable(true);
+        stkNotApproved.setVisible(false);
+        stkApproved.setVisible(false);
+        stkImage.setVisible(true);
 
     }
 
@@ -175,7 +190,7 @@ public class PMUIController {
                 String supplierName = resultSet2.getString(1);
 
 
-                NotApproved notApprovedItem = new NotApproved(quatationNumber, supplierName, type, Unit.valueOf(unit), unitPrice);
+                NotApproved notApprovedItem = new NotApproved(quatationNumber, suplierid,supplierName, type, Unit.valueOf(unit), unitPrice);
                 tblNotApproved.getItems().add(notApprovedItem);
 
 
@@ -218,7 +233,7 @@ public class PMUIController {
 
                 String balanced_quantity = "-";
 
-                Approved approvedItem = new Approved(quatationNumber, supplierName, type, Unit.valueOf(unit), unitPrice, balanced_quantity);
+                Approved approvedItem = new Approved(quatationNumber, suplierid,supplierName, type, Unit.valueOf(unit), unitPrice, balanced_quantity);
                 tblApproved.getItems().add(approvedItem);
 
 
@@ -239,7 +254,7 @@ public class PMUIController {
             String sql = "Select * from Item where approval='APPROVE'";
             ResultSet resultSet = statement.executeQuery(sql);
             PreparedStatement suplierStm = connection.prepareStatement("Select supplier_id from Quotation where quotation_number=?");
-            PreparedStatement suplierStm2 = connection.prepareStatement("select name from Supplier where id=?");
+            PreparedStatement suplierStm2 = connection.prepareStatement("select * from Supplier where id=?");
             PreparedStatement stockStm = connection.prepareStatement("select * from Stock where item_id=?");
 
 
@@ -260,6 +275,7 @@ public class PMUIController {
                 resultSet2.next();
                 String supplierName = resultSet2.getString(1);
 
+
                 stockStm.setString(1, itemNumber);
                 ResultSet resultSet3 = stockStm.executeQuery();
                 String balanced_quantity = "";
@@ -269,7 +285,7 @@ public class PMUIController {
                     balanced_quantity = "Not ordered";
                 }
 
-                Approved approvedItem = new Approved(quatationNumber, supplierName, type, Unit.valueOf(unit), unitPrice, balanced_quantity);
+                Approved approvedItem = new Approved(quatationNumber, suplierid,supplierName, type, Unit.valueOf(unit), unitPrice, balanced_quantity);
                 tblApproved.getItems().add(approvedItem);
 
 
@@ -393,4 +409,44 @@ public class PMUIController {
         }
 
     }
+
+    public void btnSearchOnAction(ActionEvent actionEvent) {
+        try {
+            if(!txtSearchSupplier.getText().isEmpty()) {
+                tblSupplier.getItems().clear();
+                String searchSupplierText = txtSearchSupplier.getText();
+                Connection connection = DBConnection.getInstance().getConnection();
+                PreparedStatement preStm = connection.prepareStatement("Select * from Supplier where id like ? or name like ?");
+                String sqlQuarry = "%" + searchSupplierText + "%";
+                preStm.setString(1, sqlQuarry);
+                preStm.setString(2, sqlQuarry);
+                ResultSet resultSet = preStm.executeQuery();
+                ArrayList<String> contactList = new ArrayList<>();
+                while (resultSet.next()) {
+                    String id = resultSet.getString("id");
+                    String name = resultSet.getString("name");
+                    String address = resultSet.getString("address");
+                    Statement stm = connection.createStatement();
+                    contactList.clear();
+                    ResultSet resultSet1 = stm.executeQuery(String.format("SELECT * from contact where supplier_id ='%s'", id));
+                    while (resultSet1.next()) {
+                        contactList.add(resultSet1.getString("contact"));
+                    }
+                    Supplier supplier = new Supplier(id, name, address, contactList);
+                    tblSupplier.getItems().add(supplier);
+                }
+
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+           new Alert(Alert.AlertType.ERROR, "Fail to search such ittem due to connection loss of data base").showAndWait();
+            throw new RuntimeException(e);
+        }
+
+
+    }
+
+
+
 }
