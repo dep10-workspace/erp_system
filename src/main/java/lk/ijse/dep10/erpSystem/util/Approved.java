@@ -9,11 +9,19 @@ import java.math.BigDecimal;
 
 
 public class Approved {
+    private int id;
     private String QuotationNumber;
     private String supplierId;
     private String name;
 
-    public Approved(String quotationNumber, String supplierId, String name, String type, Unit unit, BigDecimal unitPrice, String balanceQuantity) {
+
+    private String type;
+    private String unit;
+    private BigDecimal unitPrice;
+    private String balanceQuantity;
+
+    public Approved(int id, String quotationNumber, String supplierId, String name, String type, String unit, BigDecimal unitPrice, String balanceQuantity) {
+        this.id = id;
         QuotationNumber = quotationNumber;
         this.supplierId = supplierId;
         this.name = name;
@@ -22,11 +30,6 @@ public class Approved {
         this.unitPrice = unitPrice;
         this.balanceQuantity = balanceQuantity;
     }
-
-    private String type;
-    private Unit unit;
-    private BigDecimal unitPrice;
-    private String balanceQuantity;
 
     public String getQuotationNumber() {
         return QuotationNumber;
@@ -60,11 +63,11 @@ public class Approved {
         this.type = type;
     }
 
-    public Unit getUnit() {
+    public String getUnit() {
         return unit;
     }
 
-    public void setUnit(Unit unit) {
+    public void setUnit(String unit) {
         this.unit = unit;
     }
 
@@ -82,5 +85,13 @@ public class Approved {
 
     public void setBalanceQuantity(String balanceQuantity) {
         this.balanceQuantity = balanceQuantity;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

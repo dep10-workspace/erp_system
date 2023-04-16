@@ -99,6 +99,7 @@
                   <RadioButton fx:id="rdoPending" layoutX="466.0" layoutY="20.0" mnemonicParsing="false" text="Pending List" toggleGroup="$toggleNew" />
                   <RadioButton fx:id="rdoRejected" layoutX="682.0" layoutY="20.0" mnemonicParsing="false" text="RejectedList" toggleGroup="$toggleNew" />
                   <TextField fx:id="txtSearchAll" prefHeight="24.0" prefWidth="195.0" promptText="Searching..." />
+                  <Button fx:id="btnSearchAll" defaultButton="true" mnemonicParsing="false" onAction="#btnSearchAllOnAction" text="Search" />
                </children>
                <padding>
                   <Insets top="20.0" />

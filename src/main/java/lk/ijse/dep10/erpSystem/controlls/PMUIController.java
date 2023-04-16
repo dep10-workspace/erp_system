@@ -7,6 +7,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 import lk.ijse.dep10.erpSystem.db.DBConnection;
@@ -38,6 +39,8 @@ public class PMUIController {
     public RadioButton rdoPending;
     public RadioButton RdoReject;
     public RadioButton rdoRejected;
+    public Button btnSearchAll;
+
     @FXML
     private Button btnApproved;
 
@@ -70,57 +73,45 @@ public class PMUIController {
         btnAcceptReject.setDisable(true);
         btnAcceptReject.setDisable(true);
         toggleNew.selectedToggleProperty().addListener((value, previous, current) -> {
-            txtSearchAll.setDisable(current==null);
-            if (current.equals(rdoApproved)) {
-                txtSearchAll.clear();
-                btnAcceptApprove.setDisable(true);
-                btnAcceptReject.setDisable(false);
-                stkImage.setVisible(false);
-                stkApproved.setVisible(true);
-                stkNotApproved.setVisible(false);
-                tblApproved.getItems().clear();
-                loadDataForTable("APPROVE");
-
-            } else if (current.equals(rdoPending)) {
-                txtSearchAll.clear();
-                btnAcceptApprove.setDisable(false);
-                btnAcceptReject.setDisable(false);
-                stkImage.setVisible(false);
-                stkApproved.setVisible(false);
-                stkNotApproved.setVisible(true);
-                tblNotApproved.getItems().clear();
-                loadDataForTablePending();
-
-            } else if (current.equals(rdoRejected)) {
-                txtSearchAll.clear();
-                btnAcceptReject.setDisable(true);
-                btnAcceptApprove.setDisable(false);
-                stkImage.setVisible(false);
-                stkApproved.setVisible(true);
-                stkNotApproved.setVisible(false);
-                tblApproved.getItems().clear();
-                loadDataForTable("NOT APPROVED");
-            }
-        });
-
-
-        txtSearchAll.textProperty().addListener((value, previous, current) -> {
-            if (!current.strip().isEmpty()) {
-                if (rdoApproved.isSelected()) {
+            txtSearchAll.setDisable(current == null);
+            new Thread(()->{
+                if (current.equals(rdoApproved)) {
+                    txtSearchAll.clear();
+                    btnAcceptApprove.setDisable(true);
+                    btnAcceptReject.setDisable(false);
+                    stkImage.setVisible(false);
+                    stkApproved.setVisible(true);
+                    stkNotApproved.setVisible(false);
                     tblApproved.getItems().clear();
-                    searchList("APPROVE");
+                    loadDataForTable("APPROVE");
 
-                } else if (rdoRejected.isSelected()) {
-                    tblApproved.getItems().clear();
-                    searchList("NOT APPROVED");
+                } else if (current.equals(rdoPending)) {
+                    txtSearchAll.clear();
+                    btnAcceptApprove.setDisable(false);
+                    btnAcceptReject.setDisable(false);
+                    stkImage.setVisible(false);
+                    stkApproved.setVisible(false);
+                    stkNotApproved.setVisible(true);
+                    tblNotApproved.getItems().clear();
+                    loadDataForTablePending();
 
-                }else if(rdoPending.isSelected()){
+                } else if (current.equals(rdoRejected)) {
+                    txtSearchAll.clear();
+                    btnAcceptReject.setDisable(true);
+                    btnAcceptApprove.setDisable(false);
+                    stkImage.setVisible(false);
+                    stkApproved.setVisible(true);
+                    stkNotApproved.setVisible(false);
                     tblApproved.getItems().clear();
-                    searchListPending();
+                    loadDataForTable("NOT APPROVED");
                 }
+            }).start();
 
-            }else {
-                if(rdoPending.isSelected()){
+        });
+        txtSearchAll.textProperty().addListener((value,previous,current)->{
+            if(current.isEmpty()) {
+                new Thread(()->{
+                    if (rdoPending.isSelected()) {
                     stkImage.setVisible(false);
                     stkApproved.setVisible(false);
                     stkNotApproved.setVisible(true);
@@ -135,15 +126,21 @@ public class PMUIController {
                     tblApproved.getItems().clear();
                     loadDataForTable("NOT APPROVED");
 
-                }else if(rdoApproved.isSelected()){
+                } else if (rdoApproved.isSelected()) {
                     stkImage.setVisible(false);
                     stkApproved.setVisible(true);
                     stkNotApproved.setVisible(false);
                     tblApproved.getItems().clear();
                     loadDataForTable("APPROVE");
-                }
+                }}).start();
+
             }
+
         });
+
+
+
+
         txtSearchSupplier.textProperty().addListener((value, previous, current) -> {
             if (current.isEmpty()) {
                 tblSupplier.getItems().clear();
@@ -264,17 +261,17 @@ public class PMUIController {
                 Approved selectedItem = tblApproved.getSelectionModel().getSelectedItem();
                 Connection connection = DBConnection.getInstance().getConnection();
                 Statement stm = connection.createStatement();
-                ResultSet resultSet = stm.executeQuery(String.format("SELECT * from Item where quotation_number='%s'", selectedItem.getQuotationNumber()));
+                ResultSet resultSet = stm.executeQuery(String.format("SELECT * from Item where id='%s'", selectedItem.getId()));
                 resultSet.next();
                 String approval = resultSet.getString("approval");
                 if (approval.equals("NOT APPROVED")) {
-                    decisionApplication("APPROVE", selectedItem.getQuotationNumber());
+                    decisionApplication("APPROVE", selectedItem.getId());
                     tblApproved.getItems().remove(selectedItem);
 
                 }
 
             } else if (tblNotApproved.getSelectionModel().getSelectedItem() != null) {
-                decisionApplication("APPROVE", tblNotApproved.getSelectionModel().getSelectedItem().getQuotation_number());
+                decisionApplication("APPROVE", tblNotApproved.getSelectionModel().getSelectedItem().getId());
                 tblNotApproved.getItems().remove(tblNotApproved.getSelectionModel().getSelectedItem());
 
             }
@@ -293,26 +290,24 @@ public class PMUIController {
                 Approved selectedItem = tblApproved.getSelectionModel().getSelectedItem();
                 Connection connection = DBConnection.getInstance().getConnection();
                 Statement stm = connection.createStatement();
-                ResultSet resultSet = stm.executeQuery(String.format("SELECT * from Item where quotation_number='%s'", selectedItem.getQuotationNumber()));
+                ResultSet resultSet = stm.executeQuery(String.format("SELECT * from Item where id='%s'", selectedItem.getId()));
                 resultSet.next();
                 String approval = resultSet.getString("approval");
-                String item_number = resultSet.getString("id");
-
 
                 Statement statement = connection.createStatement();
-                ResultSet resultSet1 = statement.executeQuery(String.format("select * from Stock where item_id='%s' ", selectedItem.getQuotationNumber()));
+                ResultSet resultSet1 = statement.executeQuery(String.format("select * from Stock where item_id='%s' ", selectedItem.getId()));
                 if (resultSet1.next()) {
                     new Alert(Alert.AlertType.ERROR, "Already perched this item").showAndWait();
                     return;
                 }
                 if (approval.equals("APPROVE")) {
-                    decisionApplication("NOT APPROVED", selectedItem.getQuotationNumber());
+                    decisionApplication("NOT APPROVED", selectedItem.getId());
                     tblApproved.getItems().remove(selectedItem);
 
                 }
 
             } else if (tblNotApproved.getSelectionModel().getSelectedItem() != null) {
-                decisionApplication("NOT APPROVED", tblNotApproved.getSelectionModel().getSelectedItem().getQuotation_number());
+                decisionApplication("NOT APPROVED", tblNotApproved.getSelectionModel().getSelectedItem().getId());
                 tblNotApproved.getItems().remove(tblNotApproved.getSelectionModel().getSelectedItem());
 
             }
@@ -325,16 +320,16 @@ public class PMUIController {
 
     }
 
-    public void decisionApplication(String condition, String quotationNumber) {
+    public void decisionApplication(String condition, int id) {
         try {
-            String sql = String.format("Update Item set approval='%s' where quotation_number =?", condition);
+            String sql = String.format("Update Item set approval='%s' where id =?", condition);
             Connection connection = DBConnection.getInstance().getConnection();
             PreparedStatement preStm = connection.prepareStatement(sql);
-            preStm.setString(1, quotationNumber);
+            preStm.setInt(1, id);
             preStm.execute();
         } catch (SQLException e) {
             e.printStackTrace();
-            new Alert(Alert.AlertType.ERROR, "Fail to update set");
+            new Alert(Alert.AlertType.ERROR, "Fail to update decision");
             throw new RuntimeException(e);
         }
 
@@ -370,7 +365,7 @@ public class PMUIController {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            new Alert(Alert.AlertType.ERROR, "Fail to search such ittem due to connection loss of data base").showAndWait();
+            new Alert(Alert.AlertType.ERROR, "Fail to search such item due to connection loss of data base").showAndWait();
             throw new RuntimeException(e);
         }
 
@@ -427,7 +422,7 @@ public class PMUIController {
                 String unit = resultSet.getString("unit");
                 BigDecimal unitPrice = resultSet.getBigDecimal("price");
                 String type = resultSet.getString("item_type");
-                String itemNumber = resultSet.getString("id");
+                int itemNumber = resultSet.getInt("id");
 
                 suplierStm.setString(1, quotationNumber);
                 ResultSet resultSet1 = suplierStm.executeQuery();
@@ -441,7 +436,7 @@ public class PMUIController {
                 String supplierName = resultSet2.getString("name");
 
 
-                stockStm.setString(1, itemNumber);
+                stockStm.setInt(1, itemNumber);
                 ResultSet resultSet3 = stockStm.executeQuery();
                 String balanced_quantity = "";
                 if (resultSet3.next()) {
@@ -455,7 +450,7 @@ public class PMUIController {
                     }
                 }
 
-                Approved approvedItem = new Approved(quotationNumber, supplierid, supplierName, type, Unit.valueOf(unit), unitPrice, balanced_quantity);
+                Approved approvedItem = new Approved(itemNumber,quotationNumber, supplierid, supplierName, type, unit, unitPrice, balanced_quantity);
                 tblApproved.getItems().add(approvedItem);
 
             }
@@ -477,6 +472,7 @@ public class PMUIController {
                 String unit = resultSet.getString("unit");
                 BigDecimal unitPrice = resultSet.getBigDecimal("price");
                 String type = resultSet.getString("item_type");
+                int itemNumber =resultSet.getInt("id");
 
 
                 suplierStm.setString(1, quatationNumber);
@@ -490,7 +486,7 @@ public class PMUIController {
                 String supplierName = resultSet2.getString(1);
 
 
-                NotApproved notApprovedItem = new NotApproved(quatationNumber, suplierid, supplierName, type, Unit.valueOf(unit), unitPrice);
+                NotApproved notApprovedItem = new NotApproved(itemNumber,quatationNumber, suplierid, supplierName, type, unit, unitPrice);
                 tblNotApproved.getItems().add(notApprovedItem);
 
 
@@ -539,4 +535,28 @@ public class PMUIController {
 
 
     }
+
+    public void btnSearchAllOnAction(ActionEvent actionEvent) {
+
+                if (rdoApproved.isSelected()) {
+                    tblApproved.getItems().clear();
+                    searchList("APPROVE");
+
+
+                } else if (rdoRejected.isSelected()) {
+                    tblApproved.getItems().clear();
+                    searchList("NOT APPROVED");
+
+                } else if (rdoPending.isSelected()) {
+                    tblNotApproved.getItems().clear();
+                    searchListPending();
+                }
+
+            }
+
+
+
+
+
+
 }

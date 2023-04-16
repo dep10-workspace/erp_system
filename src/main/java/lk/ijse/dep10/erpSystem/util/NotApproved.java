@@ -7,18 +7,15 @@ import lombok.Data;
 import java.math.BigDecimal;
 
 public class NotApproved {
+    private int id;
     private String quotation_number;
     private String SupplierId;
     private String name;
     private String type;
-    private Unit unit;
-    private BigDecimal unitPrice;
+    private String unit;
 
-    public String getApproval(){
-        return "PENDING";
-    }
-
-    public NotApproved(String quotation_number, String supplierId, String name, String type, Unit unit, BigDecimal unitPrice) {
+    public NotApproved(int id, String quotation_number, String supplierId, String name, String type, String unit, BigDecimal unitPrice) {
+        this.id = id;
         this.quotation_number = quotation_number;
         SupplierId = supplierId;
         this.name = name;
@@ -26,6 +23,15 @@ public class NotApproved {
         this.unit = unit;
         this.unitPrice = unitPrice;
     }
+
+    private BigDecimal unitPrice;
+
+
+    public String getApproval(){
+        return "PENDING";
+    }
+
+
 
     public String getQuotation_number() {
         return quotation_number;
@@ -59,11 +65,11 @@ public class NotApproved {
         this.type = type;
     }
 
-    public Unit getUnit() {
+    public String getUnit() {
         return unit;
     }
 
-    public void setUnit(Unit unit) {
+    public void setUnit(String unit) {
         this.unit = unit;
     }
 
@@ -73,5 +79,13 @@ public class NotApproved {
 
     public void setUnitPrice(BigDecimal unitPrice) {
         this.unitPrice = unitPrice;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }
