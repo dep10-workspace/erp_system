@@ -3,10 +3,12 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -87,15 +89,19 @@
       </AnchorPane>
       <AnchorPane prefHeight="500.0" prefWidth="600.0">
          <children>
-            <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="34.0" prefWidth="674.0" spacing="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
+            <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="34.0" prefWidth="674.0" spacing="15.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
                <children>
-                  <Button fx:id="btnApproved" accessibleRole="TOGGLE_BUTTON" minHeight="0.0" onAction="#btnApprovedOnAction" prefWidth="150.0" text="_Approved List" />
-                  <Button fx:id="btnPending" accessibleRole="TOGGLE_BUTTON" layoutX="10.0" layoutY="10.0" onAction="#btnPendingOnAction" prefWidth="150.0" text="_Pending List" />
-                  <Button fx:id="btnRejected" accessibleRole="TOGGLE_BUTTON" layoutX="170.0" layoutY="20.0" onAction="#btnRejectedOnAction" prefWidth="150.0" text="_Rejected List" />
+                  <RadioButton fx:id="rdoApproved" mnemonicParsing="false" text="Approved List">
+                     <toggleGroup>
+                        <ToggleGroup fx:id="toggleNew" />
+                     </toggleGroup>
+                  </RadioButton>
+                  <RadioButton fx:id="rdoPending" layoutX="466.0" layoutY="20.0" mnemonicParsing="false" text="Pending List" toggleGroup="$toggleNew" />
+                  <RadioButton fx:id="rdoRejected" layoutX="682.0" layoutY="20.0" mnemonicParsing="false" text="RejectedList" toggleGroup="$toggleNew" />
                   <TextField fx:id="txtSearchAll" prefHeight="24.0" prefWidth="195.0" promptText="Searching..." />
                </children>
                <padding>
-                  <Insets top="10.0" />
+                  <Insets top="20.0" />
                </padding>
             </HBox>
             <StackPane fx:id="stkImage" layoutY="65.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="150.0" prefWidth="200.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="50.0">
