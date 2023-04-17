@@ -66,7 +66,7 @@
                   <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="10.0">
                      <children>
                         <TextField fx:id="txtSearchSupplier" maxWidth="150.0" prefHeight="24.0" prefWidth="200.0" promptText="Enter Anything" />
-                        <Button fx:id="btnSearch" defaultButton="true" mnemonicParsing="false" onAction="#btnSearchOnAction" text="Search" />
+                        <Button fx:id="btnSearch" mnemonicParsing="false" onAction="#btnSearchOnAction" text="Search" />
                      </children>
                      <padding>
                         <Insets bottom="5.0" top="10.0" />
@@ -99,7 +99,7 @@
                   <RadioButton fx:id="rdoPending" layoutX="466.0" layoutY="20.0" mnemonicParsing="false" text="Pending List" toggleGroup="$toggleNew" />
                   <RadioButton fx:id="rdoRejected" layoutX="682.0" layoutY="20.0" mnemonicParsing="false" text="RejectedList" toggleGroup="$toggleNew" />
                   <TextField fx:id="txtSearchAll" prefHeight="24.0" prefWidth="195.0" promptText="Searching..." />
-                  <Button fx:id="btnSearchAll" defaultButton="true" mnemonicParsing="false" onAction="#btnSearchAllOnAction" text="Search" />
+                  <Button fx:id="btnSearchAll" mnemonicParsing="false" onAction="#btnSearchAllOnAction" text="Search" />
                </children>
                <padding>
                   <Insets top="20.0" />

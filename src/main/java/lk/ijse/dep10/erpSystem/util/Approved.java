@@ -4,11 +4,12 @@ import lk.ijse.dep10.erpSystem.model.Unit;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 
 
-public class Approved {
+public class Approved implements Serializable {
     private int id;
     private String QuotationNumber;
     private String supplierId;

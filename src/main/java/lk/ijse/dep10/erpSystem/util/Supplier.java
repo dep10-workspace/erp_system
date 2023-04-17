@@ -14,11 +14,12 @@ public class Supplier implements Serializable {
     private String address;
     private ArrayList<String> contact;
 
-    public Supplier(String id, String name, String address, ArrayList<String> contact) {
+    public Supplier(String id, String name, String address,ArrayList<String> contact) {
         this.id = id;
         this.name = name;
         this.address = address;
         this.contact = contact;
+
     }
 
     public String getId() {
@@ -52,14 +53,14 @@ public class Supplier implements Serializable {
     public void setContact(ArrayList<String> contact) {
         this.contact = contact;
     }
+
     public ChoiceBox getContactComb(){
-        ChoiceBox cmb=new ChoiceBox();
-        ObservableList<String>contactList= cmb.getItems();
-        contactList.add("077-3017818");
+        ChoiceBox chb=new ChoiceBox();
+        ObservableList<String>contactList2= chb.getItems();
         for (String s : contact) {
-            contactList.add(s);
+            contactList2.add(s);
 
         }
-        return cmb;
+        return chb;
     }
 }

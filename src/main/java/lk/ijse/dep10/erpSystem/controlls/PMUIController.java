@@ -3,6 +3,7 @@ package lk.ijse.dep10.erpSystem.controlls;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -60,12 +61,12 @@ public class PMUIController {
     private TableView<Supplier> tblSupplier;
 
     public void initialize() {
+        stkLoading.setVisible(false);
         txtSearchAll.setDisable(true);
         btnAcceptReject.setDisable(true);
         btnAcceptReject.setDisable(true);
 
         toggleNew.selectedToggleProperty().addListener((value, previous, current) -> {
-//            stkLoading.setVisible(true);
             txtSearchAll.setDisable(current == null);
             new Thread(() -> {
                 if (current.equals(rdoApproved)) {
@@ -150,8 +151,13 @@ public class PMUIController {
 
         txtSearchSupplier.textProperty().addListener((value, previous, current) -> {
             if (current.isEmpty()) {
-                tblSupplier.getItems().clear();
-                loadDataForTableSupplier();
+                new Thread(()->{
+                    tblSupplier.setDisable(true);
+                    tblSupplier.getItems().clear();
+                    loadDataForTableSupplier();
+                    tblSupplier.setDisable(false);
+                }).start();
+
 
             }
 
@@ -188,9 +194,6 @@ public class PMUIController {
         tblNotApproved.getColumns().get(6).setCellValueFactory(new PropertyValueFactory<>("Approval"));
 
         loadDataForTableSupplier();
-//        loadDataForTableApproved();
-//        loadDataForTableRejected();
-//        loadDataForTablePending();
 
         stkNotApproved.setVisible(false);
         stkApproved.setVisible(false);
@@ -198,25 +201,7 @@ public class PMUIController {
 
     }
 
-//    private void loadDataForTablePending() {
-//
-//        try {
-//
-//
-//            Connection connection = DBConnection.getInstance().getConnection();
-//            Statement statement = connection.createStatement();
-//            String sql = "Select * from Item where approval='PENDING'";
-//            ResultSet resultSet = statement.executeQuery(sql);
-//            selectQuarriesAndUpdateTablePending(resultSet);
-//
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//            new Alert(Alert.AlertType.ERROR, "Fail to load approved items").showAndWait();
-//            throw new RuntimeException(e);
-//        } finally {
-//
-//        }
-//    }
+
 
 
     private void loadDataForTable(String condition) {
@@ -236,30 +221,36 @@ public class PMUIController {
 
     private void loadDataForTableSupplier() {
         try {
+            ObservableList<Supplier>supplyTable =tblSupplier.getItems();
             Connection connection = DBConnection.getInstance().getConnection();
-            Statement statement = connection.createStatement();
-            PreparedStatement preparedStatement = connection.prepareStatement("Select contact from contact where supplier_id=?");
-            ResultSet resultSet = statement.executeQuery("Select id,name,address from Supplier");
-            ArrayList<String> contactList = new ArrayList<>();
+            Statement supplierStm = connection.createStatement();
+            ResultSet resultSet = supplierStm.executeQuery("Select * from Supplier");
+            PreparedStatement contactStm = connection.prepareStatement("Select * from contact where supplier_id=?");
+
             while (resultSet.next()) {
                 String id = resultSet.getString("id");
                 String name = resultSet.getString("name");
                 String address = resultSet.getString("address");
-                preparedStatement.setString(1, id);
-                ResultSet resultSet1 = preparedStatement.executeQuery();
-                contactList.clear();
+                contactStm.setString(1, id);
+                ResultSet resultSet1 = contactStm.executeQuery();
+                ArrayList<String> contactList = new ArrayList<>();
 
                 while (resultSet1.next()) {
-                    String contact = resultSet1.getString(1);
+                    String contact = resultSet1.getString("contact");
                     contactList.add(contact);
+
                 }
                 Supplier supplier = new Supplier(id, name, address, contactList);
-                tblSupplier.getItems().add(supplier);
+                supplyTable.add(supplier);
+
+
+
 
             }
+
         } catch (SQLException e) {
             e.printStackTrace();
-            new Alert(Alert.AlertType.ERROR, "Fail to connact with database tables").showAndWait();
+            new Alert(Alert.AlertType.ERROR, "Fail to connect with database").showAndWait();
             throw new RuntimeException(e);
         }
     }
@@ -349,24 +340,26 @@ public class PMUIController {
         try {
             if (!txtSearchSupplier.getText().isEmpty()) {
                 tblSupplier.getItems().clear();
-                String searchSupplierText = txtSearchSupplier.getText();
                 Connection connection = DBConnection.getInstance().getConnection();
-                PreparedStatement preStm = connection.prepareStatement("Select * from Supplier where id like ? or name like ?");
-                String sqlQuarry = "%" + searchSupplierText + "%";
-                preStm.setString(1, sqlQuarry);
-                preStm.setString(2, sqlQuarry);
-                ResultSet resultSet = preStm.executeQuery();
-                ArrayList<String> contactList = new ArrayList<>();
+                PreparedStatement supplierpreStm = connection.prepareStatement("Select * from Supplier where id like ? or name like ? or address like ?");
+                String sqlQuarry = "%" + txtSearchSupplier.getText() + "%";
+                supplierpreStm.setString(1, sqlQuarry);
+                supplierpreStm.setString(2, sqlQuarry);
+                supplierpreStm.setString(3, sqlQuarry);
+                ResultSet resultSet = supplierpreStm.executeQuery();
+
                 while (resultSet.next()) {
                     String id = resultSet.getString("id");
                     String name = resultSet.getString("name");
                     String address = resultSet.getString("address");
                     Statement stm = connection.createStatement();
-                    contactList.clear();
+                    ArrayList<String> contactList = new ArrayList<>();
                     ResultSet resultSet1 = stm.executeQuery(String.format("SELECT * from contact where supplier_id ='%s'", id));
                     while (resultSet1.next()) {
-                        contactList.add(resultSet1.getString("contact"));
+                        String contact = resultSet1.getString("contact");
+                        contactList.add(contact);
                     }
+//                    System.out.println(contactList);
                     Supplier supplier = new Supplier(id, name, address, contactList);
                     tblSupplier.getItems().add(supplier);
                 }
@@ -375,14 +368,16 @@ public class PMUIController {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            new Alert(Alert.AlertType.ERROR, "Fail to search such item due to connection loss of data base").showAndWait();
+            new Alert(Alert.AlertType.ERROR, "Fail to load supplier details from data base ").showAndWait();
             throw new RuntimeException(e);
         }
 
 
     }
 
-    public void searchList(String condition) {
+    public void searchList(String condition)
+
+    {
 
         try {
             Connection connection = DBConnection.getInstance().getConnection();
@@ -471,84 +466,12 @@ public class PMUIController {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            new Alert(Alert.AlertType.ERROR, "Fail to load reqiured data from database").showAndWait();
+            new Alert(Alert.AlertType.ERROR, "Fail to load required data from database").showAndWait();
             throw new RuntimeException(e);
         }
 
     }
 
-//    public void selectQuarriesAndUpdateTablePending(ResultSet resultSet) {
-//        try {
-//            Connection connection = DBConnection.getInstance().getConnection();
-//            PreparedStatement quotationStm = connection.prepareStatement("Select supplier_id from Quotation where quotation_number=?");
-//            PreparedStatement suplierStm = connection.prepareStatement("select name from Supplier where id=?");
-//            while (resultSet.next()) {
-//                String quatationNumber = resultSet.getString("quotation_number");
-//                String unit = resultSet.getString("unit");
-//                BigDecimal unitPrice = resultSet.getBigDecimal("price");
-//                String type = resultSet.getString("item_type");
-//                int itemNumber = resultSet.getInt("id");
-//
-//
-//                quotationStm.setString(1, quatationNumber);
-//                ResultSet resultSet1 = quotationStm.executeQuery();
-//                resultSet1.next();
-//                String supplierId = resultSet1.getString(1);
-//
-//                suplierStm.setString(1, supplierId);
-//                ResultSet resultSet2 = suplierStm.executeQuery();
-//                resultSet2.next();
-//                String supplierName = resultSet2.getString(1);
-//
-//
-//                NotApproved notApprovedItem = new NotApproved(itemNumber, quatationNumber, supplierId, supplierName, type, unit, unitPrice);
-//                tblNotApproved.getItems().add(notApprovedItem);
-//
-//
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//            new Alert(Alert.AlertType.ERROR, "Fail to execute SQL Quarries").showAndWait();
-//            throw new RuntimeException(e);
-//        }
-//    }
-
-//    public void searchListPending() {
-//        try {
-//            Connection connection = DBConnection.getInstance().getConnection();
-//            String searchText = "%" + txtSearchAll.getText().strip() + "%";
-//            PreparedStatement preStm = connection.prepareStatement(String.format("Select * from Item where (item_type like ? or quotation_number like ?) and approval = '%s'", "PENDING"));
-//            preStm.setString(1, searchText);
-//            preStm.setString(2, searchText);
-//            ResultSet resultSet = preStm.executeQuery();
-//            selectQuarriesAndUpdateTable(resultSet);
-//
-//            PreparedStatement preStm2 = connection.prepareStatement("Select * from Supplier where name like ?");
-//            preStm2.setString(1, searchText);
-//            ResultSet resultSet1 = preStm2.executeQuery();
-//
-//            while (resultSet1.next()) {
-//                String id = resultSet1.getString("id");
-//
-//                Statement stm = connection.createStatement();
-//                ResultSet resultSet2 = stm.executeQuery(String.format("Select * from Quotation where supplier_id ='%s'", id));
-//                while (resultSet2.next()) {
-//                    String quotationNo = resultSet2.getString("quotation_number");
-//                    Statement stm2 = connection.createStatement();
-//                    ResultSet resultSet3 = stm2.executeQuery(String.format("Select * from Item where( quotation_number='%s' and approval='%s')", quotationNo, "PENDING"));
-//                    selectQuarriesAndUpdateTable(resultSet3);
-//
-//                }
-//
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//            new Alert(Alert.AlertType.ERROR, "Fail to Search").showAndWait();
-//            throw new RuntimeException(e);
-//        }
-//
-//
-//    }
 
     public void btnSearchAllOnAction(ActionEvent actionEvent) {
 

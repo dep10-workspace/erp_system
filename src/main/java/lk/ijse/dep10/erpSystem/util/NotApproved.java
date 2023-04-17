@@ -1,12 +1,14 @@
 package lk.ijse.dep10.erpSystem.util;
 
+import com.sun.source.doctree.SerialDataTree;
 import lk.ijse.dep10.erpSystem.model.Unit;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class NotApproved {
+public class NotApproved implements Serializable {
     private int id;
     private String quotation_number;
     private String SupplierId;
